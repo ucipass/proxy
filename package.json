@@ -1,0 +1,29 @@
+{
+  "name": "ucipass-proxy",
+  "version": "1.0.0",
+  "description": "Web forward proxy",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ucipass/proxy.git"
+  },
+  "keywords": [
+    "proxy",
+    "web",
+    "squid",
+    "forwarding"
+  ],
+  "author": "ucipass",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ucipass/proxy/issues"
+  },
+  "homepage": "https://github.com/ucipass/proxy#readme",
+  "dependencies": {
+    "http-proxy": "^1.18.0",
+    "url": "^0.11.0"
+  }
+}
