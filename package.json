@@ -4,7 +4,8 @@
   "description": "Web forward proxy",
   "main": "index.js",
   "scripts": {
-    "test": "npm test"
+    "test": "npm test",
+    "trypublish": "npm publish || true"
   },
   "repository": {
     "type": "git",
