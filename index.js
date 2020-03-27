@@ -8,7 +8,7 @@ const httpProxy = require("http-proxy");
 const http = require("http");
 const url = require("url");
 const net = require('net');
-var log = require("ucipass-logger")("proxy")
+const log = require("ucipass-logger")("proxy")
 log.transports.console.level = process.env.LOG_LEVEL ? process.env.LOG_LEVEL :'info'
 const PROXY_PORT = 3128
 
