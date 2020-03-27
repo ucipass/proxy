@@ -12,7 +12,6 @@ const log = require("ucipass-logger")("proxy")
 log.transports.console.level = process.env.LOG_LEVEL ? process.env.LOG_LEVEL :'info'
 const PROXY_PORT = 3128
 
-
 class Proxy{
   constructor(PROXY_PORT){
     this.port = PROXY_PORT ? PROXY_PORT : process.env.PROXY_PORT ? process.env.PROXY_PORT :  3128
