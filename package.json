@@ -1,6 +1,6 @@
 {
   "name": "@ucipass/proxy",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Web forward proxy",
   "main": "index.js",
   "scripts": {
