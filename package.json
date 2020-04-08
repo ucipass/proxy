@@ -25,6 +25,7 @@
   "homepage": "https://github.com/ucipass/proxy#readme",
   "dependencies": {
     "http-proxy": "^1.18.0",
+    "readline-sync": "^1.4.10",
     "ucipass-logger": "^1.0.5",
     "url": "^0.11.0"
   }

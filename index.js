@@ -8,6 +8,7 @@ const httpProxy = require("http-proxy");
 const http = require("http");
 const url = require("url");
 const net = require('net');
+const readlineSync = require('readline-sync');
 const log = require("ucipass-logger")("proxy")
 log.transports.console.level = process.env.LOG_LEVEL ? process.env.LOG_LEVEL :'info'
 const PROXY_PORT = 3128
@@ -18,9 +19,10 @@ class Proxy{
     this.server = null
   }
 
-  start(){
+  async start(){
 
     var server = this.server
+    log.debug(`Proxy server starting on port ${this.port}`)
     server = http.createServer(function (req, res) {
       var urlObj = url.parse(req.url);
       var target = urlObj.protocol + "//" + urlObj.host;
@@ -34,7 +36,7 @@ class Proxy{
       });
     
       proxy.web(req, res, {target: target});
-    }).listen(PROXY_PORT);  //this is the port your clients will connect to
+    })
     
     var regex_hostport = /^([^:]+)(:([0-9]+))?$/;
     
@@ -93,9 +95,22 @@ class Proxy{
     
     });
 
+    return new Promise((resolve, reject) => {
+      server.listen(this.port,()=>{
+        resolve(server)
+      });
+    });
+
   }
 
 }
 
-(new Proxy()).start()
+module.exports = Proxy
 
+if (require.main === module) {
+  let PROXY_PORT = process.env.PROXY_PORT ? process.env.PROXY_PORT : readlineSync.question(`Enter PROXY_PORT [3128]: `);
+  let proxy = new Proxy(PROXY_PORT)
+  proxy.start()
+  .then ( server => log.info (`Proxy server started on port ${server.address().port}`))
+  .catch( error  => log.error(`Proxy start failure!\n ${error.message}`))
+}

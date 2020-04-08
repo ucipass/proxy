@@ -7,14 +7,20 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch Program",
-            "skipFiles": [
-                "<node_internals>/**"
+            "name": "proxy",
+            "args": [
+                ""
             ],
+            "env": { 
+                "LOG_LEVEL": "info",
+                "NODE_ENV": "testing",
+                "PROXY_PORT": "167",
+                },           
             "program": "${workspaceFolder}/index.js",
             "cwd": "${workspaceRoot}",
             "runtimeExecutable": null,
             "outputCapture": "std"
         }
+
     ]
 }
