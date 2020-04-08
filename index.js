@@ -96,9 +96,13 @@ class Proxy{
     });
 
     return new Promise((resolve, reject) => {
-      server.listen(this.port,()=>{
-        resolve(server)
+      server.once('error', function (error) {
+        reject(error)
       });
+
+      server.listen(this.port,(error)=>{
+        resolve(server)
+      });        
     });
 
   }
@@ -112,5 +116,5 @@ if (require.main === module) {
   let proxy = new Proxy(PROXY_PORT)
   proxy.start()
   .then ( server => log.info (`Proxy server started on port ${server.address().port}`))
-  .catch( error  => log.error(`Proxy start failure!\n ${error.message}`))
+  .catch( error  => log.error(`Proxy start failure: ${error.message}`))
 }

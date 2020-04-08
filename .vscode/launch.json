@@ -14,7 +14,7 @@
             "env": { 
                 "LOG_LEVEL": "info",
                 "NODE_ENV": "testing",
-                "PROXY_PORT": "167",
+                "PROXY_PORT": "3128",
                 },           
             "program": "${workspaceFolder}/index.js",
             "cwd": "${workspaceRoot}",
