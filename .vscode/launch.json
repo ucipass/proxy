@@ -16,7 +16,7 @@
                 "NODE_ENV": "testing",
                 "PROXY_PORT": "3128",
                 },           
-            "program": "${workspaceFolder}/index.js",
+            "program": "${workspaceFolder}/proxy.js",
             "cwd": "${workspaceRoot}",
             "runtimeExecutable": null,
             "outputCapture": "std"

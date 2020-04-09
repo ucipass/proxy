@@ -2,10 +2,11 @@
   "name": "@ucipass/proxy",
   "version": "1.0.3",
   "description": "Web forward proxy",
-  "main": "index.js",
+  "main": "proxy.js",
   "scripts": {
     "test": "npm test",
-    "trypublish": "npm publish || true"
+    "trypublish": "npm publish || true",
+    "build": "node ./node_modules/pkg/lib-es5/bin.js proxy.js"
   },
   "repository": {
     "type": "git",
@@ -28,5 +29,8 @@
     "readline-sync": "^1.4.10",
     "ucipass-logger": "^1.0.5",
     "url": "^0.11.0"
+  },
+  "devDependencies": {
+    "pkg": "^4.4.6"
   }
 }
