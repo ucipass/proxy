@@ -23,33 +23,19 @@ class Proxy{
   async start(){
 
     log.debug(`Proxy server starting on port ${this.port}`)
-<<<<<<< HEAD:index.js
     this.server = http.createServer( (req, res)=> {
-      var urlObj = url.parse(req.url);
-      var target = urlObj.protocol + "//" + urlObj.host;
+      let urlObj = new URL(req.url)
+      // var target = urlObj.protocol + "//" + urlObj.host;
     
-      log.info("HTTP request for:", target);
+      log.info("HTTP request for:", urlObj.hostname);
     
       this.proxy = httpProxy.createProxyServer({});
       this.proxy.on("error", (err, req, res)=> {
-=======
-    server = http.createServer(function (req, res) {
-      let urlObj = new URL(req.url)
-    
-      log.info("HTTP  request for:", urlObj.hostname);
-      
-      var proxy = httpProxy.createProxyServer({});
-      proxy.on("error", function (err, req, res) {
->>>>>>> 201cbff4122f1174236ea8ee846293a555f082f5:proxy.js
         log.info("proxy error", err);
         res.end();
       });
     
-<<<<<<< HEAD:index.js
-      this.proxy.web(req, res, {target: target});
-=======
-      proxy.web(req, res, {target: urlObj.origin});
->>>>>>> 201cbff4122f1174236ea8ee846293a555f082f5:proxy.js
+      this.proxy.web(req, res, {target: urlObj.origin});
     })
     
     this.server.on('connection', (socket)=> {
