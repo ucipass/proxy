@@ -17,30 +17,46 @@ class Proxy{
   constructor(PROXY_PORT){
     this.port = PROXY_PORT ? PROXY_PORT : process.env.PROXY_PORT ? process.env.PROXY_PORT :  3128
     this.server = null
+    this.proxy = null
+    this.sockets = {}
+    this.nextSocketId = 0
   }
 
   async start(){
 
-    var server = this.server
     log.debug(`Proxy server starting on port ${this.port}`)
-    server = http.createServer(function (req, res) {
+    this.server = http.createServer( (req, res)=> {
       var urlObj = url.parse(req.url);
       var target = urlObj.protocol + "//" + urlObj.host;
     
       log.info("HTTP request for:", target);
     
-      var proxy = httpProxy.createProxyServer({});
-      proxy.on("error", function (err, req, res) {
+      this.proxy = httpProxy.createProxyServer({});
+      this.proxy.on("error", (err, req, res)=> {
         log.info("proxy error", err);
         res.end();
       });
     
-      proxy.web(req, res, {target: target});
+      this.proxy.web(req, res, {target: target});
     })
     
+    this.server.on('connection', (socket)=> {
+      // Add a newly connected socket
+      var socketId = this.nextSocketId++;
+      this.sockets[socketId] = socket;
+      log.debug('socket', socketId, 'opened');
+    
+      // Remove the socket when it closes
+      socket.on('close',  ()=> {
+        log.debug('socket', socketId, 'closed');
+        delete this.sockets[socketId];
+      });
+
+    });
+
     var regex_hostport = /^([^:]+)(:([0-9]+))?$/;
     
-    var getHostPortFromString = function (hostString, defaultPort) {
+    var getHostPortFromString = (hostString, defaultPort)=> {
       var host = hostString;
       var port = defaultPort;
     
@@ -55,13 +71,18 @@ class Proxy{
       return ( [host, port] );
     };
     
-    server.addListener('connect', function (req, socket, bodyhead) {
+    this.server.addListener('connect',  (req, socket, bodyhead)=> {
+      var socketId = this.nextSocketId++;
+
       var hostPort = getHostPortFromString(req.url, 443);
       var hostDomain = hostPort[0];
       var port = parseInt(hostPort[1]);
       log.info("HTTPS  request for:", hostDomain, port);
     
       var proxySocket = new net.Socket();
+      log.debug("psocket",socketId)
+      this.sockets[socketId] = proxySocket;
+
       proxySocket.connect(port, hostDomain, function () {
           proxySocket.write(bodyhead);
           socket.write("HTTP/" + req.httpVersion + " 200 Connection established\r\n\r\n");
@@ -70,6 +91,10 @@ class Proxy{
     
       proxySocket.on('data', function (chunk) {
         socket.write(chunk);
+      });
+    
+      proxySocket.on('close', ()=> {
+        delete this.sockets[socketId];
       });
     
       proxySocket.on('end', function () {
@@ -96,25 +121,55 @@ class Proxy{
     });
 
     return new Promise((resolve, reject) => {
-      server.once('error', function (error) {
+      this.server.once('error', function (error) {
         reject(error)
       });
 
-      server.listen(this.port,(error)=>{
-        resolve(server)
+      this.server.listen(this.port,(error)=>{
+        resolve(this.server)
       });        
     });
 
   }
 
+  async stop(){
+    return new Promise((resolve, reject) => {
+      this.server.close( ()=> { 
+        log.debug('Server closed!'); 
+        this.server.removeListener("connect",()=>{
+          log.debug("removed listerner!")
+        })
+        if(this.proxy) this.proxy.close(()=>{
+          log.debug("proxy closed!")
+        })  
+    
+      });
+      // Destroy all open sockets
+      for (var socketId in this.sockets) {
+        // log.debug('socket', socketId, 'destroyed!!!!!!');
+        this.sockets[socketId].destroy();
+
+      }          
+    });
+  }
+
 }
 
 module.exports = Proxy
-
+const timeout = 15000
 if (require.main === module) {
   let PROXY_PORT = process.env.PROXY_PORT ? process.env.PROXY_PORT : readlineSync.question(`Enter PROXY_PORT [3128]: `);
   let proxy = new Proxy(PROXY_PORT)
   proxy.start()
   .then ( server => log.info (`Proxy server started on port ${server.address().port}`))
+  // .then ( ()=>{
+  //   return new Promise((resolve, reject) => {
+  //       setTimeout( async () => {
+  //         console.log("PROXY STOPPED")
+  //         await proxy.stop()
+  //         resolve()
+  //       }, 5000);
+  //   });
+  // })
   .catch( error  => log.error(`Proxy start failure: ${error.message}`))
 }
