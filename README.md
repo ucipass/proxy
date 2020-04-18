@@ -1,5 +1,5 @@
 # proxy
-Web forward proxy (HTTP/HTTPS)
+Web forward proxy (HTTP/HTTPS). Binaries are available for Windows/Linux/MacOS.
 
 ![](peek.gif)
 

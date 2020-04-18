@@ -6,7 +6,7 @@
   "scripts": {
     "test": "npm test",
     "trypublish": "npm publish || true",
-    "build": "node ./node_modules/pkg/lib-es5/bin.js proxy.js"
+    "build": "node ./node_modules/pkg/lib-es5/bin.js --out-path binaries proxy.js"
   },
   "repository": {
     "type": "git",
