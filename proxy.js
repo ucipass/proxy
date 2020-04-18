@@ -1,7 +1,4 @@
-//  Install npm dependencies first
-//  npm init
-//  npm install --save http-proxy@1.11.1
-//  https://stackoverflow.com/questions/8165570/https-proxy-server-in-node-js/49864522#49864522
+//  Tip of the hat to: https://stackoverflow.com/questions/8165570/https-proxy-server-in-node-js/49864522#49864522
 
 const http = require("http");
 const net = require('net');
