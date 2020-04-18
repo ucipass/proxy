@@ -1,9 +1,10 @@
 # proxy
-Web forward proxy
+Web forward proxy (HTTP/HTTPS)
 
 Sample usage:
 ```
-const proxy = new Proxy(3128)
+const proxyPort = 3128
+const proxy = new Proxy(proxyPort)
 proxy.start()
 .then(()=>{
   // Use it for a while....
