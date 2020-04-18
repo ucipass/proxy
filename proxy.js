@@ -160,14 +160,5 @@ if (require.main === module) {
   let proxy = new Proxy(PROXY_PORT)
   proxy.start()
   .then ( server => log.info (`Proxy server started on port ${server.address().port}`))
-  // .then ( ()=>{
-  //   return new Promise((resolve, reject) => {
-  //       setTimeout( async () => {
-  //         console.log("PROXY STOPPED")
-  //         await proxy.stop()
-  //         resolve()
-  //       }, 5000);
-  //   });
-  // })
   .catch( error  => log.error(`Proxy start failure: ${error.message}`))
 }
