@@ -150,12 +150,13 @@ class Proxy{
 
 }
 
-module.exports = Proxy
-const timeout = 15000
+const proxy = (proxyPort)=>{ return (new Proxy(proxyPort)).start()}
+
+module.exports = proxy
+
 if (require.main === module) {
   let PROXY_PORT = process.env.PROXY_PORT ? process.env.PROXY_PORT : readlineSync.question(`Enter PROXY_PORT [3128]: `);
-  let proxy = new Proxy(PROXY_PORT)
-  proxy.start()
+  proxy(PROXY_PORT)
   .then ( server => log.info (`Proxy server started on port ${server.address().port}`))
   .catch( error  => log.error(`Proxy start failure: ${error.message}`))
 }

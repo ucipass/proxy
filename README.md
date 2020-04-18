@@ -13,10 +13,9 @@ npm install @ucipass/proxy
 
 Sample code:
 ```
-const Proxy = require('@ucipass/proxy')
+const proxy = require('@ucipass/proxy')
 const proxyPort = 3128
-const proxy = new Proxy(proxyPort)
-proxy.start()
+proxy(proxyPort)
 .then(()=>{
   // Use it for a while....
 })
