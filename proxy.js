@@ -25,8 +25,9 @@ class Proxy{
       // var target = urlObj.protocol + "//" + urlObj.host;
     
       log.info("HTTP request for:", urlObj.hostname);
+      // log.info("HTTP request for:", urlObj);
     
-      this.proxy = httpProxy.createProxyServer({});
+      this.proxy = httpProxy.createProxyServer({ws: true});
       this.proxy.on("error", (err, req, res)=> {
         log.info("proxy error", err);
         res.end();
@@ -48,6 +49,7 @@ class Proxy{
       });
 
     });
+
 
     var regex_hostport = /^([^:]+)(:([0-9]+))?$/;
     
