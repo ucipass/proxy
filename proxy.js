@@ -130,23 +130,18 @@ class Proxy{
   }
 
   async stop(){
-    return new Promise((resolve, reject) => {
-      this.server.close( ()=> { 
-        log.debug('Server closed!'); 
-        this.server.removeListener("connect",()=>{
-          log.debug("removed listerner!")
-        })
-        if(this.proxy) this.proxy.close(()=>{
-          log.debug("proxy closed!")
-        })  
-    
-      });
       // Destroy all open sockets
       for (var socketId in this.sockets) {
         // log.debug('socket', socketId, 'destroyed!!!!!!');
         this.sockets[socketId].destroy();
+      }   
 
-      }          
+      return new Promise((resolve, reject) => {
+        this.server.close( ()=> { 
+            log.debug("proxy closed!")
+          resolve(true)
+      });
+       
     });
   }
 
