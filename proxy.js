@@ -123,7 +123,7 @@ class Proxy{
       });
 
       this.server.listen(this.port,(error)=>{
-        resolve(this.server)
+        resolve(this)
       });        
     });
 
@@ -154,6 +154,6 @@ module.exports = proxy
 if (require.main === module) {
   let PROXY_PORT = process.env.PROXY_PORT ? process.env.PROXY_PORT : readlineSync.question(`Enter PROXY_PORT [3128]: `);
   proxy(PROXY_PORT)
-  .then ( server => log.info (`Proxy server started on port ${server.address().port}`))
+  .then ( server => log.info (`Proxy server started on port ${PROXY_PORT}`))
   .catch( error  => log.error(`Proxy start failure: ${error.message}`))
 }
